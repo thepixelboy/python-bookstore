@@ -1,20 +1,28 @@
 import sqlite3
 
 
-def execute(query):
+def execute(sql, params=None):
     conn = sqlite3.connect("books.db")
     cur = conn.cursor()
 
-    cur.execute(query)
+    if params is not None:
+        cur.execute(sql, params)
+    else:
+        cur.execute(sql)
+
     conn.commit()
     conn.close()
 
 
-def fetch(query):
+def fetch(sql, params=None):
     conn = sqlite3.connect("books.db")
     cur = conn.cursor()
 
-    cur.execute(query)
+    if params is not None:
+        cur.execute(sql, params)
+    else:
+        cur.execute(sql)
+
     rows = cur.fetchall()
     conn.close()
 
@@ -27,14 +35,10 @@ def connect():
 
 
 def insert(title, author, year, isbn):
-    query = "INSERT INTO books VALUES(NULL,'%s','%s',%s,%s)" % (
-        title,
-        author,
-        year,
-        isbn,
+    query = "INSERT INTO books (title, author, year, isbn) VALUES (:title, :author, :year, :isbn)"
+    execute(
+        query, {"title": title, "author": author, "year": year, "isbn": isbn}
     )
-
-    execute(query)
 
 
 def view():
@@ -72,18 +76,15 @@ def search(title=None, author=None, year=None, isbn=None):
 
 
 def delete(id):
-    query = "DELETE FROM books WHERE id = %s" % id
-    execute(query)
+    query = "DELETE FROM books WHERE id = %s"
+    execute(query, (id,))
 
 
 def update(id, title, author, year, isbn):
-    query = (
-        "UPDATE books SET title = '%s', author = '%s', year = %s, isbn = %s WHERE id = %s"
-        % (title, author, year, isbn, id)
-    )
-    execute(query)
+    query = "UPDATE books SET title = %s, author = %s, year = %s, isbn = %s WHERE id = %s"
+    execute(query, (title, author, year, isbn, id))
 
 
 connect()
 
-print(view())
+# print(view())
