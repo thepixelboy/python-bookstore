@@ -12,6 +12,22 @@ from tkinter import Button, Entry, Label, Listbox, Scrollbar, StringVar, Tk
 import database
 
 
+def get_selected_row(event):
+    global selected_row
+
+    index = book_list.curselection()[0]
+    selected_row = book_list.get(index)
+
+    title_entry.delete(0, tkinter.END)
+    title_entry.insert(tkinter.END, selected_row[1])
+    author_entry.delete(0, tkinter.END)
+    author_entry.insert(tkinter.END, selected_row[2])
+    year_entry.delete(0, tkinter.END)
+    year_entry.insert(tkinter.END, selected_row[3])
+    isbn_entry.delete(0, tkinter.END)
+    isbn_entry.insert(tkinter.END, selected_row[4])
+
+
 def view_all():
     book_list.delete(0, tkinter.END)
     for row in database.view():
@@ -49,18 +65,21 @@ def add_entry():
 
 
 def update_selected():
-    ...
+    database.update(
+        selected_row[0],
+        title_text.get(),
+        author_text.get(),
+        year_text.get(),
+        isbn_text.get(),
+    )
 
 
 def delete_selected():
-    ...
-
-
-def close_app():
-    ...
+    database.delete(selected_row[0])
 
 
 window = Tk()
+window.wm_title("BookStore")
 
 # Frontend
 # Labels
@@ -103,6 +122,8 @@ book_scrollbar.grid(row=2, column=2, rowspan=6)
 book_list.configure(yscrollcommand=book_scrollbar.set)
 book_scrollbar.configure(command=book_list.yview)
 
+book_list.bind("<<ListboxSelect>>", get_selected_row)
+
 # Buttons
 button_viewall = Button(window, text="View all", width=12, command=view_all)
 button_viewall.grid(row=2, column=3)
@@ -123,7 +144,7 @@ button_delete = Button(
 )
 button_delete.grid(row=6, column=3)
 
-button_close = Button(window, text="Close", width=12, command=close_app)
+button_close = Button(window, text="Close", width=12, command=window.destroy)
 button_close.grid(row=7, column=3)
 
 

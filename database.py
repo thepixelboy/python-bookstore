@@ -76,13 +76,22 @@ def search(title=None, author=None, year=None, isbn=None):
 
 
 def delete(id):
-    query = "DELETE FROM books WHERE id = %s"
-    execute(query, (id,))
+    query = "DELETE FROM books WHERE id = :id"
+    execute(query, {"id": id})
 
 
 def update(id, title, author, year, isbn):
-    query = "UPDATE books SET title = %s, author = %s, year = %s, isbn = %s WHERE id = %s"
-    execute(query, (title, author, year, isbn, id))
+    query = "UPDATE books SET title = :title, author = :author, year = :year, isbn = :isbn WHERE id = :id"
+    execute(
+        query,
+        {
+            "title": title,
+            "author": author,
+            "year": year,
+            "isbn": isbn,
+            "id": id,
+        },
+    )
 
 
 connect()
