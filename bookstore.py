@@ -8,6 +8,8 @@ update an existing entry, delete an entry and close the application.
 """
 from tkinter import Button, Entry, Label, Listbox, Scrollbar, StringVar, Tk
 
+import database
+
 window = Tk()
 
 # Frontend
