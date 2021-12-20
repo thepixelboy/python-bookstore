@@ -13,19 +13,22 @@ import database
 
 
 def get_selected_row(event):
-    global selected_row
+    try:
+        global selected_row
 
-    index = book_list.curselection()[0]
-    selected_row = book_list.get(index)
+        index = book_list.curselection()[0]
+        selected_row = book_list.get(index)
 
-    title_entry.delete(0, tkinter.END)
-    title_entry.insert(tkinter.END, selected_row[1])
-    author_entry.delete(0, tkinter.END)
-    author_entry.insert(tkinter.END, selected_row[2])
-    year_entry.delete(0, tkinter.END)
-    year_entry.insert(tkinter.END, selected_row[3])
-    isbn_entry.delete(0, tkinter.END)
-    isbn_entry.insert(tkinter.END, selected_row[4])
+        title_entry.delete(0, tkinter.END)
+        title_entry.insert(tkinter.END, selected_row[1])
+        author_entry.delete(0, tkinter.END)
+        author_entry.insert(tkinter.END, selected_row[2])
+        year_entry.delete(0, tkinter.END)
+        year_entry.insert(tkinter.END, selected_row[3])
+        isbn_entry.delete(0, tkinter.END)
+        isbn_entry.insert(tkinter.END, selected_row[4])
+    except IndexError:
+        pass
 
 
 def view_all():
