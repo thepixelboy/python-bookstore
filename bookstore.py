@@ -9,7 +9,9 @@ update an existing entry, delete an entry and close the application.
 import tkinter
 from tkinter import Button, Entry, Label, Listbox, Scrollbar, StringVar, Tk
 
-import database
+from database import Database
+
+database = Database()
 
 
 def get_selected_row(event):
